@@ -99,3 +99,84 @@ int main(){
    
     return 0;
 }
+
+/////////////////////////////////////////////  
+// strongly connected components
+// steps - 
+// 1. do dfs1 to store nodes according to finish time in stack (stack top has highest finish time node)
+// 2. now stack top has node which is part of 1 of the strong connected comp. of this graph 
+// 3. but we need sink reference so - reverse the graph ->so that source, sink interchange
+// 4. now do dfs of graph using that stack to get strong connected comp.
+
+int n, m;
+vector<int> adj[nax], revadj[nax];
+stack<int> s;
+bool visited[nax];
+
+void dfs1(int vertex){                      // store the stack
+    visited[vertex] = true;
+    for(int i = 0; i < adj[vertex].size(); i++)
+        if(!visited[adj[vertex][i]])
+            dfs1(adj[vertex][i]);
+    
+    s.push(vertex);
+}
+
+void graphrev(){                            // reverse the graph
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < adj[i].size(); j++)
+            revadj[adj[i][j]].push_back(i);
+
+}
+llint ch = 0;
+void dfs2(int node){                    // no. of children in this SSC
+    visited[node] = true; ch++;
+    for(int i = 0; i < revadj[node].size(); i++)
+    {
+        if(!visited[revadj[node][i]])
+        {
+            dfs2(revadj[node][i]);
+        }   
+    }
+}
+
+int main(){
+    boost
+    // input node, edges and find 
+    //(sum of no. of nodes in SCC with odd elements - sum of no. of nodes in SCC with even elements)
+    
+    cin >> n >> m;
+    for(int i = 0; i < m; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        x--; y--;
+        adj[x].push_back(y);
+    }
+
+    memset(visited, 0, sizeof(visited));
+
+    for(int i = 0; i < n; i++)
+    {
+        if(!visited[i])
+            dfs1(i);
+    }
+    graphrev();
+    llint sm = 0;
+    memset(visited, 0, sizeof(visited));
+    while(!s.empty())
+    {
+        int node = s.top();
+        s.pop();
+        if(!visited[node])
+        {
+            dfs2(node);
+            sm += (ch%2 == 0 ? -ch : ch);
+            ch = 0;
+        }
+    }
+    cout << sm << '\n';
+
+
+   return 0;
+}
