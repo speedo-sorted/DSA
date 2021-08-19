@@ -180,3 +180,54 @@ int main(){
 
    return 0;
 }
+
+///////////// 
+// topological sort 
+
+// create topoligical sort (lexographically smallest, since there can be many) of directed acyclic graph in T vector using stack
+// this method is similar to small part of finding SCC here we just store nodes in sorted order in T
+vector<int> adj[nax];
+bool visited[nax];
+int n, m;
+vector<int> T;
+
+
+void dfs(int node){                     // main function which works
+    visited[node] = true;
+    for(int i = 0; i < adj[node].size(); i++)
+        if(!visited[adj[node][i]])
+            dfs(adj[node][i]);
+    
+    T.push_back(node);
+}
+
+
+
+int main(){
+    boost
+    cin >> n >> m;
+    memset(visited, 0, sizeof(visited));
+
+    for(int i = 0; i < m; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        x--; y--;
+        adj[x].push_back(y);
+
+    }
+    for(int i = 0; i < n; i++)
+        sort(all(adj[i]), greater<int>());
+
+    for(int i = n -1; i>-1; i--)
+    {
+        if(!visited[i])
+        dfs(i);
+    }
+    // cout << "dfsd";
+    for(int i = T.size() -1; i > -1; i--)
+        cout << T[i] + 1 << ' ';
+    cout << '\n';
+    
+    return 0;
+}
