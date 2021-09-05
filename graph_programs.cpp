@@ -7,7 +7,66 @@
 using namespace std;
 #define mod int(1e9+7)
 #define nax int(1e4 + 5)
-#define nax int(1e5 + 5)
+
+//////////////////////////////////////  
+// hamiltonian path - O(2^n * n^2)
+// idea is to use dp and bitmasking i.e 1011 means 4th, 2nd , and 1st elements are
+// remaining elements to be traversed, so take each let us say 4 then check for remaining nodes
+// if there is edge - 2 -> 4 and if some path exists which ends at 2 with remaining 1, 2 nodes
+// by this- i.e 1 -> 2 (ending at 2 and contains remaining nodes -1,2)
+// now 1 -> 2 -> 4 (since there is a path from 2 to 4)
+
+
+
+int Adj[12][12];                        // 12 nodes
+bool dp[12][1<<12];
+
+void solve()
+{
+    int n, m;
+    cin >> n >> m;
+    for(int i = 0; i < n; i++)                  // first make all paths false
+        for(int j = 0; j < (1<<n); j++)
+            dp[i][j] = false;
+    
+    for(int i = 0; i < n; i++)                 // make 1-> 1 true, 2 -> 2 true ...
+        dp[i][1<<i] = true;
+
+    for(int i = 0; i < m; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        Adj[x][y] = true;
+        Adj[y][x] = true;
+    }
+
+    for(int i = 0; i < 1<<n; i++)           // loop each pattern 1010111...
+        for(int j = 0; j < n; j++)
+            if(i & (1<<j))                  // if jth bit is set
+                for(int k = 0; k < n; k++)
+                    if( ( j != k ) && ( i & (1<<k) ) && Adj[k][j] == true )
+                    {
+                        if( dp[k][i ^ (1<<j)] )         // if ... 4 -> 3 -> ... -> k exists
+                            dp[j][i] = true;
+                        
+                        break;
+                    }
+
+    bool hamilton = false;
+    for(int i = 0; i < n; i++)
+        if(dp[i][(1<<n) - 1])               // ans is dp[i][2^n - 1]
+        {
+            hamilton = true;
+            break;
+        }
+
+    if(hamilton)
+        cout << "YES\n";
+    else 
+        cout << "NO\n";
+
+
+}
 
 //////////////////////////////////////////////////////////////////////
 //articulation point by simple dfs and checking low
@@ -15,11 +74,14 @@ int d[nax], low[nax];
 llint n, m;
 vector<int> adj[nax];
 bool isart[nax];
+int vistime = 0;
 
-void dfs(int vertex, int time, int parent)
+void dfs(int vertex, int parent)
 {
-    d[vertex] = time + 1;
-    low[vertex] = time + 1;
+    d[vertex] = vistime + 1;
+    low[vertex] = vistime + 1;
+    vistime++;
+
     int child = 0;
     for(int i = 0; i < adj[vertex].size(); i++)
     {
@@ -29,7 +91,7 @@ void dfs(int vertex, int time, int parent)
         else if(d[node] == 0)
         {   
             child++;
-            dfs(node, time + 1, vertex);
+            dfs(node, vertex);
             low[vertex] = min(low[vertex], low[node]);
             
             if(vertex == 0)
