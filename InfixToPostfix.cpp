@@ -1,20 +1,7 @@
 #include<bits\stdc++.h>
 
 using namespace std;
-void intopo(string);
-bool pref(char,char);
-int main(){
-    int n;
-    cin>>n;
-    for(int i=0;i<n;++i){
-        string s;
-        cin>>s;
-        intopo(s);
-    }
 
-
-    return 0;
-}
 void intopo(string str){
     string vec;
     int i=0;
@@ -58,4 +45,15 @@ bool pref(char stx,char vey){
     else if(vey=='('){return 1;}
     else {return 0;}
 
+}
+
+int main(){
+    
+    cout << "give the string: ";
+    string s;
+    cin >> s;
+
+    intopo(s);
+
+    return 0;
 }

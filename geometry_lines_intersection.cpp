@@ -27,14 +27,15 @@ struct P {
  
 };
 
-
-bool point_on_line(P& a ,P& b ,P& c){
+// see if A lies on BC -> cross product should be 0 and a.x lie b/w b,c.x and a.y lie b/w b,c.y
+bool point_on_line(P& a ,P& b ,P& c){   
     if(!a.cross(b,c) && (a.x>=min(c.x,b.x) && a.y>=min(c.y,b.y) && a.x<=max(c.x,b.x) && a.y<=max(c.y,b.y)))
         return 1;
     
     return 0;
 }
 
+// used inside intersect function -> it tells if c or d b/w AB or a or b bw CD
 bool line_on_line(P& a,P& b,P& c,P& d)      // if lines are collinear then check if they have point in common
 {
     for(int i=0;i<2;i++)

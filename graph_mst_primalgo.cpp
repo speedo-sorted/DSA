@@ -9,6 +9,12 @@ using namespace std;
 #define mod int(1e9+7)
 #define nax int(1e4 + 3)
 
+/*
+    prims algorithm for minimum spanning tree 
+
+*/
+
+
 vector<pair<int, int>> adj[nax];
 set<pair<int, int>> st;
 bool visited[nax] = {};
@@ -47,6 +53,7 @@ int main(){
 
     }
 
+    // sum of weights
     cout << ans << '\n';
 
     return 0;
