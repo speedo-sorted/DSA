@@ -9,8 +9,7 @@ using namespace std;
 #define nax int(5e5 + 5)
 
 /* 
-lps always looks like - 0 0 1 1 2 3 0 1 2 3 3 4 
-i.e increasing then 0 then increasing (repeat)
+lps can either increase by one, stay the same, or decrease by some amount
  */
 void createLps(vector<int>& lps, string s){
 

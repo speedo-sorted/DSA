@@ -1,61 +1,64 @@
 #include<bits/stdc++.h>
-#define llint long long int
-#define all(v) v.begin(),v.end()
 
-#define fill(a,b)  memset(a,b,sizeof(a))
-#define what_is(x) cerr<<#x<<"is"<<x<<'\n';
-#define boost std::ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 using namespace std;
-void merg(int a[],int l,int r){
-    int mid=(l+r)/2,p1=l,p2=mid+1,pos=0;
-    int sz=r-l+1;
-    int b[sz];
-    while(pos<r-l+1)
+
+const int inf = 99999999;
+
+void merge(vector<int>& a, int l, int mid, int r)
+{
+    // initialize first and second with sorted partitions
+    vector<int> first(a.begin() + l, a.begin() + mid + 1);
+    vector<int> second(a.begin() + mid + 1, a.begin() + r + 1);
+
+    first.push_back(inf);
+    second.push_back(inf);
+
+    int pos_l = 0, pos_r = 0;
+
+    for(int i = l; i <= r; i++)
     {
-        if(a[p1]<=a[p2] && p1<mid+1)
+        if(first[pos_l] < second[pos_r])
         {
-            (b[pos]=a[p1]);
-            p1++;
-        }
-        else if(a[p2]<=a[p1] && p2<r+1)
-        {
-            (b[pos]=a[p2]);
-            p2++;
-        }
-        else if(p1>mid)
-        {
-            (b[pos]=a[p2]);
-            p2++;
+            a[i] = first[pos_l];
+            pos_l++;
         }
         else
         {
-            (b[pos]=a[p1]);
-            p1++;
+            a[i] = second[pos_r];
+            pos_r++;
         }
-        
-        pos++;
-    }
-    for(int x:b)
-    {
-        a[l]=x; l++;
     }
 }
-void mergesort(int a[],int l,int r){
-    int mid=(l+r)/2;
 
-    if(l<r)
-    {
-        mergesort(a,l,mid);
-        mergesort(a,mid+1,r);
-    }
-    merg(a,l,r);
+void merge_sort(vector<int>& a, int l, int r)
+{
+    if(l == r)
+        return;
+    
+    int mid = (l + r) / 2;
+
+    merge_sort(a, l, mid);
+    merge_sort(a, mid + 1, r);
+
+    merge(a, l, mid, r);
+
 }
 
 int main(){
-    boost
-    int a[]={7,3,9,3,-1,8,4,6,1,5,3,0};    
-   mergesort(a,0,sizeof(a)/4-1);
-    for(int i=0;i<12;i++)
-        cout<<a[i]<<' ';
+
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    for(auto& x: a)
+        cin >> x;
+    
+    merge_sort(a, 0, n - 1);
+
+    for(auto x: a)
+        cout << x << ' ';
+
+    cout << '\n';
+
     return 0;
 }

@@ -8,6 +8,49 @@ using namespace std;
 #define mod int(1e9+7)
 #define nax int(1e4 + 5)
 
+// to clear adjancy list for every test case do below 
+/* 
+    vector<vector<llint>> adj;
+
+    while(t--)
+    {
+        adj.assign(n + 1, {});      // it will assign empty vector for each index
+        TIME - O(N)
+    }
+
+ */
+
+
+///////////////////////////// unweighted bfs shortest path b/w 2 nodes
+
+// create dist vector
+// node - start point , end - point to be found (if not given do bfs to all connected points)
+void bfs(int node, vector<int>& dist, int end = -1)
+{
+    fill(all(dist), -1);
+
+    queue<int> q;
+    q.push(node);
+    dist[node] = 0;
+
+    while(!q.empty())
+    {
+        int c = q.front();
+        q.pop();
+
+        for(auto x: adj[c])
+            if(dist[x] == -1)
+            {
+                q.push(x);
+                dist[x] = dist[c] + 1;
+                if(end == x)
+                    return;
+            }
+    }
+}
+
+
+
 //////////////////////////////////////  
 // hamiltonian path - O(2^n * n^2)
 // idea is to use dp and bitmasking i.e 1011 means 4th, 2nd , and 1st elements are
